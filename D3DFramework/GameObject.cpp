@@ -96,6 +96,33 @@ void GameObject::RollRotation(float fAngle)
 	}*/
 }
 
+//끄덕끄덕
+void GameObject::QPitchRotation(float fAngle)
+{
+	D3DXQUATERNION qRot;
+	D3DXQuaternionRotationAxis(&qRot, &Axis[E_Axis_Right], fAngle);
+	rotX = rotX * qRot;//쿼터니언 값 적용
+
+	D3DXMATRIXA16 matRot;
+	D3DXMatrixRotationQuaternion(&matRot, &qRot);
+
+	D3DXVec3TransformNormal(&Axis[E_Axis_Forward], &Axis[E_Axis_Forward], &matRot);
+	D3DXVec3TransformNormal(&Axis[E_Axis_Up], &Axis[E_Axis_Up], &matRot);
+
+	//변화된 최종 행렬을 가지고 있는다.
+	D3DXMatrixRotationAxis(&XRotMat, &Axis[E_Axis_Right], rot.x * 3.14 / 180);
+}
+//도리도리
+void GameObject::QYawRotation(float fAngle)
+{
+
+}
+//갸우뚱
+void GameObject::QRollRotation(float fAngle)
+{
+
+}
+
 //void GameObject::Render()
 //{
 //	/*D3DXMATRIXA16 RotMat;

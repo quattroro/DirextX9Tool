@@ -128,6 +128,13 @@ public:
 	virtual void RollRotation(float fAngle);
 
 	
+	//끄덕끄덕
+	virtual void QPitchRotation(float fAngle);
+	//도리도리
+	virtual void QYawRotation(float fAngle);
+	//갸우뚱
+	virtual void QRollRotation(float fAngle);
+
 
 	//위치값과 회전값에 따라 그려준다.
 	virtual void Render() = 0;
@@ -150,6 +157,10 @@ protected:
 	D3DXVECTOR3 localpos;
 	//3방향 축
 	D3DXVECTOR3 Axis[E_Axis_Max];
+
+	D3DXQUATERNION rotX;
+	D3DXQUATERNION rotY;
+	D3DXQUATERNION rotZ;
 
 	//test
 	D3DXMATRIXA16 FinalMat;
