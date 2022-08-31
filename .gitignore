@@ -30,3 +30,8 @@
 *.exe
 *.out
 *.app
+/D3DFramework/Debug
+/D3DFramework/x64
+/Debug
+/x64
+/.vs
