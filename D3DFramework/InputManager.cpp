@@ -1,17 +1,68 @@
 #include "InputManager.h"
 
+void InputManager::Init(HWND _hwnd)
+{
+	this->_hwnd = _hwnd;
+}
+
 void InputManager::SetMousePosition(D3DXVECTOR2 pos)
 {
 	CurMousePos = pos;
 }
 
+void InputManager::Update()
+{
+	/*HWND hwnd = ::GetActiveWindow();
+	if (_hwnd != hwnd)
+	{
+		for (int key = 0; key < KEY_TYPE_COUNT; key++)
+			keybuf[key] = KEY_STATE::NONE;
+
+		return;
+	}*/
+
+	BYTE asciiKeys[KEY_TYPE_COUNT] = {};
+	if (::GetKeyboardState(asciiKeys) == false)
+		return;
+
+	for (int key = 0; key < KEY_TYPE_COUNT; key++)
+	{
+		// 키가 눌려 있으면 true
+		//if (::GetAsyncKeyState(key) & 0x8000)
+		if (asciiKeys[key] & 0x80)
+		{
+			KEY_STATE& state = keybuf[key];
+
+			// 이전 프레임에 키를 누른 상태라면 PRESS
+			if (state == KEY_STATE::PRESS || state == KEY_STATE::DOWN)
+				state = KEY_STATE::PRESS;
+			else
+				state = KEY_STATE::DOWN;
+		}
+		else
+		{
+			KEY_STATE& state = keybuf[key];
+
+			// 이전 프레임에 키를 누른 상태라면 UP
+			if (state == KEY_STATE::PRESS || state == KEY_STATE::DOWN)
+				state = KEY_STATE::UP;
+			else
+				state = KEY_STATE::NONE;
+		}
+	}
+}
+
 //마우스 움직임 포착
 void InputManager::InputUpdate()
 {
+
+
+
+
 	MouseAxis.x = CurMousePos.x - PreMousePos.x;
 	MouseAxis.y = CurMousePos.y - PreMousePos.y;
 
-	if (keybuf['W'])
+	if (keybuf[(int)KEY_TYPE::W]==KEY_STATE::PRESS)
 	{
 		if (VerticalAxis < 1)
 		{
@@ -25,7 +76,7 @@ void InputManager::InputUpdate()
 		}
 		
 	}
-	else if (keybuf['S'])
+	else if (keybuf[(int)KEY_TYPE::S] == KEY_STATE::PRESS)
 	{
 		if (VerticalAxis > -1)
 		{
@@ -40,7 +91,7 @@ void InputManager::InputUpdate()
 	}
 	
 
-	if (keybuf['D'])
+	if (keybuf[(int)KEY_TYPE::D] == KEY_STATE::PRESS)
 	{
 		if (HorizentalAxis < 1)
 		{
@@ -53,7 +104,7 @@ void InputManager::InputUpdate()
 			}
 		}
 	}
-	else if(keybuf['A'])
+	else if(keybuf[(int)KEY_TYPE::A] == KEY_STATE::PRESS)
 	{
 		if (HorizentalAxis > -1)
 		{
@@ -67,7 +118,7 @@ void InputManager::InputUpdate()
 		}
 	}
 	
-	if (!keybuf['W'] && !keybuf['S'])
+	if (keybuf[(int)KEY_TYPE::W] != KEY_STATE::PRESS && keybuf[(int)KEY_TYPE::S] != KEY_STATE::PRESS)
 	{
 		if (VerticalAxis != 0.0f)
 		{
@@ -101,7 +152,7 @@ void InputManager::InputUpdate()
 		
 	}
 
-	if (!keybuf['D'] && !keybuf['A'])
+	if (keybuf[(int)KEY_TYPE::D] != KEY_STATE::PRESS && keybuf[(int)KEY_TYPE::A] != KEY_STATE::PRESS)
 	{
 		if (HorizentalAxis != 0.0f)
 		{
@@ -134,12 +185,12 @@ void InputManager::InputUpdate()
 
 void InputManager::KeyDown(char input)
 {
-	keybuf[input] = true;
+	//keybuf[input] = true;
 }
 
 void InputManager::KeyUp(char input)
 {
-	keybuf[input] = false;
+	//keybuf[input] = false;
 	/*if (!keybuf['W'])
 	{
 		VerticalAxis = 0;
@@ -162,9 +213,23 @@ void InputManager::KeyUp(char input)
 	}*/
 }
 
-bool InputManager::GetKey(char code)
+//bool InputManager::GetKey(char code)
+//{
+//	return keybuf[code];
+//}
+
+
+bool InputManager::KeyIsDown(char code)
 {
-	return keybuf[code];
+	return (keybuf[code] == KEY_STATE::DOWN);
+}
+bool InputManager::KeyIsUp(char code)
+{
+	return (keybuf[code] == KEY_STATE::UP);
+}
+bool InputManager::KeyIsPressed(char code)
+{
+	return (keybuf[code] == KEY_STATE::PRESS);
 }
 
 D3DXVECTOR2 InputManager::GetMouseAxis()

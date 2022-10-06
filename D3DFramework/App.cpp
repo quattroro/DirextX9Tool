@@ -222,13 +222,13 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
         break;
 
     case WM_KEYDOWN:
-        InputManager::instance()->KeyDown(wParam);
-        keybuf[wParam] = true;
+        //InputManager::instance()->KeyDown(wParam);
+        //keybuf[wParam] = true;
         break;
 
     case WM_KEYUP:
-        InputManager::instance()->KeyUp(wParam);
-        keybuf[wParam] = false;
+        //InputManager::instance()->KeyUp(wParam);
+        //keybuf[wParam] = false;
         break;
 
     case WM_DESTROY:

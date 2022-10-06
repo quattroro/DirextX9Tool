@@ -80,8 +80,10 @@ bool EnterMsgLoop(bool(*render)(float time))
         {
             float curtime = (float)timeGetTime();
             DeltaTime = (curtime - lasttime)*0.001f;//이전 프레임에서 현재 프레임까지의 간격
-            
+
+            InputManager::instance()->Update();
             InputManager::instance()->InputUpdate();
+            
 
             render(DeltaTime);
 
