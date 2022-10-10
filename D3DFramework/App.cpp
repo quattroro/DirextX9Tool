@@ -84,15 +84,6 @@ void KeyInput()
         {
             camera->FowardMove();
         }
-        else
-        {
-            //tiger->DirectionMove(D3DXVECTOR3(InputManager::instance()->GetVertivalAxis(), 0, 0));
-            //tiger->FowardMove(InputManager::instance()->GetVertivalAxis());
-            //tiger->Translation(InputManager::instance()->GetVertivalAxis(), 0, 0);
-        }
-        //x = 1;
-        
-        
     }
     else if (keybuf['A'])
     {
@@ -101,11 +92,6 @@ void KeyInput()
         if (OnClicked)
         {
             camera->LeftMove();
-        }
-        else
-        {
-            //tiger->DirectionMove(D3DXVECTOR3(0, 0, 1));
-            //tiger->LeftMove(InputManager::instance()->GetHorizentalAxis());
         }
     }
 
@@ -117,11 +103,6 @@ void KeyInput()
         {
             camera->BackMove();
         }
-        else
-        {
-            //tiger->DirectionMove(D3DXVECTOR3(-1, 0, 0));
-            //tiger->BackMove(InputManager::instance()->GetVertivalAxis());
-        }
     }
 
     else if (keybuf['D'])
@@ -131,11 +112,6 @@ void KeyInput()
         if (OnClicked)
         {
             camera->RightMove();
-        }
-        else
-        {
-            //tiger->DirectionMove(D3DXVECTOR3(0, 0, -1));
-            //tiger->RightMove(InputManager::instance()->GetHorizentalAxis());
         }
     }
     
@@ -157,7 +133,7 @@ bool Render(float time)
         {
             //SetupMatrices(0);
             tiger->Translation(InputManager::instance()->GetVertivalAxis()*DeltaTime * 10.f, 0, 0);
-            tiger->Translation(0, 0, InputManager::instance()->GetHorizentalAxis() * DeltaTime*10.f);
+            tiger->Translation(0, 0, -InputManager::instance()->GetHorizentalAxis() * DeltaTime*10.f);
 
             tiger->Render();
             tiger2->Render();
