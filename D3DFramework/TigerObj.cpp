@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "TigerObj.h"
 #include "Utility.h"
 

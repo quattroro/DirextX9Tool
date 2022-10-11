@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "Utility.h"
 #include "TigerObj.h"
 #include "Plane.h"
@@ -78,14 +79,18 @@ void KeyInput()
 {
     int x=0, z=0;
 
-    if (keybuf['W'])
+    if (InputManager::instance()->KeyIsPressed(KEY_TYPE::W))
     {
         if (OnClicked)
         {
             camera->FowardMove();
         }
+        else
+        {
+            tiger->DirectionMove(D3DXVECTOR3(1, 0, 0));
+        }
     }
-    else if (keybuf['A'])
+    else if (InputManager::instance()->KeyIsPressed(KEY_TYPE::A))
     {
         //z = 1;
         
@@ -93,9 +98,13 @@ void KeyInput()
         {
             camera->LeftMove();
         }
+        else
+        {
+            tiger->DirectionMove(D3DXVECTOR3(0, 0, 1));
+        }
     }
 
-    else if (keybuf['S'])
+    else if (InputManager::instance()->KeyIsPressed(KEY_TYPE::S))
     {
         //x = -1;
         
@@ -103,15 +112,23 @@ void KeyInput()
         {
             camera->BackMove();
         }
+        else
+        {
+            tiger->DirectionMove(D3DXVECTOR3(-1, 0, 0));
+        }
     }
 
-    else if (keybuf['D'])
+    else if (InputManager::instance()->KeyIsPressed(KEY_TYPE::D))
     {
         //z = -1;
         
         if (OnClicked)
         {
             camera->RightMove();
+        }
+        else
+        {
+            tiger->DirectionMove(D3DXVECTOR3(0, 0, -1));
         }
     }
     
@@ -132,8 +149,8 @@ bool Render(float time)
         if (SUCCEEDED(g_pd3dDevice->BeginScene()))
         {
             //SetupMatrices(0);
-            tiger->Translation(InputManager::instance()->GetVertivalAxis()*DeltaTime * 10.f, 0, 0);
-            tiger->Translation(0, 0, -InputManager::instance()->GetHorizentalAxis() * DeltaTime*10.f);
+            //tiger->Translation(InputManager::instance()->GetVertivalAxis()*DeltaTime * 10.f, 0, 0);
+            //tiger->Translation(0, 0, -InputManager::instance()->GetHorizentalAxis() * DeltaTime*10.f);
 
             tiger->Render();
             tiger2->Render();

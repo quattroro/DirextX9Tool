@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "InputManager.h"
 
 void InputManager::Init(HWND _hwnd)
@@ -219,17 +220,17 @@ void InputManager::KeyUp(char input)
 //}
 
 
-bool InputManager::KeyIsDown(char code)
+bool InputManager::KeyIsDown(KEY_TYPE code)
 {
-	return (keybuf[code] == KEY_STATE::DOWN);
+	return (keybuf[(int)code] == KEY_STATE::DOWN);
 }
-bool InputManager::KeyIsUp(char code)
+bool InputManager::KeyIsUp(KEY_TYPE code)
 {
-	return (keybuf[code] == KEY_STATE::UP);
+	return (keybuf[(int)code] == KEY_STATE::UP);
 }
-bool InputManager::KeyIsPressed(char code)
+bool InputManager::KeyIsPressed(KEY_TYPE code)
 {
-	return (keybuf[code] == KEY_STATE::PRESS);
+	return (keybuf[(int)code] == KEY_STATE::PRESS);
 }
 
 D3DXVECTOR2 InputManager::GetMouseAxis()

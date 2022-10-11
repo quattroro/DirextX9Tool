@@ -81,9 +81,9 @@ public:
 
 	bool GetKey(char code);//키값을 입력하면 현재 해당 키가 눌려있는지를 확인해서 리턴 해준다.
 
-	bool KeyIsDown(char code);
-	bool KeyIsUp(char code);
-	bool KeyIsPressed(char code);
+	bool KeyIsDown(KEY_TYPE code);
+	bool KeyIsUp(KEY_TYPE code);
+	bool KeyIsPressed(KEY_TYPE code);
 
 	D3DXVECTOR2 GetMouseAxis();//한번 업데이트가 호출 될때마다 현재 마우스 위치값을 받아와서 이전 프레임의 마우스 위치값과 비교해서 마우스의 움직임 값을 리턴 해준다.
 
