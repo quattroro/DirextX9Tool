@@ -2,6 +2,10 @@
 #include "Utility.h"
 #include "InputManager.h"
 
+float DeltaTime;
+HWND hWndMain;
+LPDIRECT3D9         g_pD3D = NULL;
+LPDIRECT3DDEVICE9   g_pd3dDevice = NULL;
 
 HRESULT InitD3D(HINSTANCE hInstance, int nCmdShow , float width, float height, LPDIRECT3D9& g_pD3D, LPDIRECT3DDEVICE9&   g_pd3dDevice)
 {
@@ -23,6 +27,8 @@ HRESULT InitD3D(HINSTANCE hInstance, int nCmdShow , float width, float height, L
     RegisterClass(&wcex);
 
     HWND hWnd = CreateWindow(L"D3DFramework", L"D3DFramework", WS_OVERLAPPEDWINDOW, 100, 100, width, height, nullptr, nullptr, wcex.hInstance, nullptr);
+
+    hWndMain = hWnd;
 
     if (NULL == (g_pD3D = Direct3DCreate9(D3D_SDK_VERSION)))
         return E_FAIL;

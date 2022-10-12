@@ -12,6 +12,7 @@
 #include <vector>
 #include <memory>
 
+#define D3DFVF_CUSTOMVERTEX (D3DFVF_XYZ|D3DFVF_TEX1|D3DFVF_XYZ|D3DFVF_XYZ)
 
 using namespace std;
 
@@ -21,3 +22,25 @@ using Vector2 = D3DXVECTOR2;
 using Matrix = D3DXMATRIXA16;
 using Quaternion = D3DXQUATERNION;
 
+
+
+struct Vertex
+{
+
+	Vertex() {}
+	Vertex(Vector3 p, Vector2 u, Vector3 n, Vector3 t)
+	{
+		pos = p;
+		uv = u;
+		normal = n;
+		tangent = t;
+	}
+
+
+	Vector3 pos;
+	Vector2 uv;
+	Vector3 normal;
+	Vector3 tangent;
+
+
+};

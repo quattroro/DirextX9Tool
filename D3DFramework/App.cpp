@@ -4,10 +4,14 @@
 #include "Plane.h"
 #include "Camera.h"
 #include "InputManager.h"
+#include "Transform.h"
+#include "Mesh.h"
+#include "MeshRenderer.h"
 
-
-LPDIRECT3D9         g_pD3D = NULL; // Used to create the D3DDevice
-LPDIRECT3DDEVICE9   g_pd3dDevice = NULL; // Our rendering device
+extern float DeltaTime;
+extern HWND hWndMain;
+extern LPDIRECT3D9         g_pD3D ;
+extern LPDIRECT3DDEVICE9   g_pd3dDevice ;
 
 LPD3DXMESH          g_pMesh = NULL; // Our mesh object in sysmem
 D3DMATERIAL9* g_pMeshMaterials = NULL; // Materials for our mesh
@@ -15,10 +19,10 @@ LPDIRECT3DTEXTURE9* g_pMeshTextures = NULL; // Textures for our mesh
 DWORD               g_dwNumMaterials = 0L;   // Number of mesh materials
 
 
-TigerObj* tiger;
-TigerObj* tiger2;
-Plane* plane;
-Camera* camera;
+//TigerObj* tiger;
+//TigerObj* tiger2;
+//Plane* plane;
+//Camera* camera;
 
 bool keybuf[256];
 bool OnClicked;
@@ -31,28 +35,284 @@ D3DXVECTOR2 ChangeRotVal;
 D3DXVECTOR2 MoveMousePos;
 D3DXVECTOR2 StartMousePos;
 
+GameObject* sphere;
+
+
+
+
+Mesh* LoadCubeMesh()
+{
+    /*Mesh* findMesh = Get<Mesh>(L"Cube");
+    if (findMesh)
+        return findMesh;*/
+
+    float w2 = 0.5f;
+    float h2 = 0.5f;
+    float d2 = 0.5f;
+
+    vector<Vertex> vec(24);
+
+    // ¾Õ¸é
+    vec[0] = Vertex(Vector3(-w2, -h2, -d2), Vector2(0.0f, 1.0f), Vector3(0.0f, 0.0f, -1.0f), Vector3(1.0f, 0.0f, 0.0f));
+    vec[1] = Vertex(Vector3(-w2, +h2, -d2), Vector2(0.0f, 0.0f), Vector3(0.0f, 0.0f, -1.0f), Vector3(1.0f, 0.0f, 0.0f));
+    vec[2] = Vertex(Vector3(+w2, +h2, -d2), Vector2(1.0f, 0.0f), Vector3(0.0f, 0.0f, -1.0f), Vector3(1.0f, 0.0f, 0.0f));
+    vec[3] = Vertex(Vector3(+w2, -h2, -d2), Vector2(1.0f, 1.0f), Vector3(0.0f, 0.0f, -1.0f), Vector3(1.0f, 0.0f, 0.0f));
+    // µÞ¸é
+    vec[4] = Vertex(Vector3(-w2, -h2, +d2), Vector2(1.0f, 1.0f), Vector3(0.0f, 0.0f, 1.0f), Vector3(-1.0f, 0.0f, 0.0f));
+    vec[5] = Vertex(Vector3(+w2, -h2, +d2), Vector2(0.0f, 1.0f), Vector3(0.0f, 0.0f, 1.0f), Vector3(-1.0f, 0.0f, 0.0f));
+    vec[6] = Vertex(Vector3(+w2, +h2, +d2), Vector2(0.0f, 0.0f), Vector3(0.0f, 0.0f, 1.0f), Vector3(-1.0f, 0.0f, 0.0f));
+    vec[7] = Vertex(Vector3(-w2, +h2, +d2), Vector2(1.0f, 0.0f), Vector3(0.0f, 0.0f, 1.0f), Vector3(-1.0f, 0.0f, 0.0f));
+    // À­¸é
+    vec[8] = Vertex(Vector3(-w2, +h2, -d2), Vector2(0.0f, 1.0f), Vector3(0.0f, 1.0f, 0.0f), Vector3(1.0f, 0.0f, 0.0f));
+    vec[9] = Vertex(Vector3(-w2, +h2, +d2), Vector2(0.0f, 0.0f), Vector3(0.0f, 1.0f, 0.0f), Vector3(1.0f, 0.0f, 0.0f));
+    vec[10] = Vertex(Vector3(+w2, +h2, +d2), Vector2(1.0f, 0.0f), Vector3(0.0f, 1.0f, 0.0f), Vector3(1.0f, 0.0f, 0.0f));
+    vec[11] = Vertex(Vector3(+w2, +h2, -d2), Vector2(1.0f, 1.0f), Vector3(0.0f, 1.0f, 0.0f), Vector3(1.0f, 0.0f, 0.0f));
+    // ¾Æ·§¸é
+    vec[12] = Vertex(Vector3(-w2, -h2, -d2), Vector2(1.0f, 1.0f), Vector3(0.0f, -1.0f, 0.0f), Vector3(-1.0f, 0.0f, 0.0f));
+    vec[13] = Vertex(Vector3(+w2, -h2, -d2), Vector2(0.0f, 1.0f), Vector3(0.0f, -1.0f, 0.0f), Vector3(-1.0f, 0.0f, 0.0f));
+    vec[14] = Vertex(Vector3(+w2, -h2, +d2), Vector2(0.0f, 0.0f), Vector3(0.0f, -1.0f, 0.0f), Vector3(-1.0f, 0.0f, 0.0f));
+    vec[15] = Vertex(Vector3(-w2, -h2, +d2), Vector2(1.0f, 0.0f), Vector3(0.0f, -1.0f, 0.0f), Vector3(-1.0f, 0.0f, 0.0f));
+    // ¿ÞÂÊ¸é
+    vec[16] = Vertex(Vector3(-w2, -h2, +d2), Vector2(0.0f, 1.0f), Vector3(-1.0f, 0.0f, 0.0f), Vector3(0.0f, 0.0f, -1.0f));
+    vec[17] = Vertex(Vector3(-w2, +h2, +d2), Vector2(0.0f, 0.0f), Vector3(-1.0f, 0.0f, 0.0f), Vector3(0.0f, 0.0f, -1.0f));
+    vec[18] = Vertex(Vector3(-w2, +h2, -d2), Vector2(1.0f, 0.0f), Vector3(-1.0f, 0.0f, 0.0f), Vector3(0.0f, 0.0f, -1.0f));
+    vec[19] = Vertex(Vector3(-w2, -h2, -d2), Vector2(1.0f, 1.0f), Vector3(-1.0f, 0.0f, 0.0f), Vector3(0.0f, 0.0f, -1.0f));
+    // ¿À¸¥ÂÊ¸é
+    vec[20] = Vertex(Vector3(+w2, -h2, -d2), Vector2(0.0f, 1.0f), Vector3(1.0f, 0.0f, 0.0f), Vector3(0.0f, 0.0f, 1.0f));
+    vec[21] = Vertex(Vector3(+w2, +h2, -d2), Vector2(0.0f, 0.0f), Vector3(1.0f, 0.0f, 0.0f), Vector3(0.0f, 0.0f, 1.0f));
+    vec[22] = Vertex(Vector3(+w2, +h2, +d2), Vector2(1.0f, 0.0f), Vector3(1.0f, 0.0f, 0.0f), Vector3(0.0f, 0.0f, 1.0f));
+    vec[23] = Vertex(Vector3(+w2, -h2, +d2), Vector2(1.0f, 1.0f), Vector3(1.0f, 0.0f, 0.0f), Vector3(0.0f, 0.0f, 1.0f));
+
+    vector<WORD> idx(36);
+
+    // ¾Õ¸é
+    idx[0] = 0; idx[1] = 1; idx[2] = 2;
+    idx[3] = 0; idx[4] = 2; idx[5] = 3;
+    // µÞ¸é
+    idx[6] = 4; idx[7] = 5; idx[8] = 6;
+    idx[9] = 4; idx[10] = 6; idx[11] = 7;
+    // À­¸é
+    idx[12] = 8; idx[13] = 9; idx[14] = 10;
+    idx[15] = 8; idx[16] = 10; idx[17] = 11;
+    // ¾Æ·§¸é
+    idx[18] = 12; idx[19] = 13; idx[20] = 14;
+    idx[21] = 12; idx[22] = 14; idx[23] = 15;
+    // ¿ÞÂÊ¸é
+    idx[24] = 16; idx[25] = 17; idx[26] = 18;
+    idx[27] = 16; idx[28] = 18; idx[29] = 19;
+    // ¿À¸¥ÂÊ¸é
+    idx[30] = 20; idx[31] = 21; idx[32] = 22;
+    idx[33] = 20; idx[34] = 22; idx[35] = 23;
+
+    //shared_ptr<Mesh> mesh = make_shared<Mesh>();
+    Mesh* mesh = new Mesh();
+    mesh->Init(vec, idx);
+    //Add(L"Cube", mesh);
+
+    return mesh;
+}
+
+Mesh* LoadSphereMesh()
+{
+    /*shared_ptr<Mesh> findMesh = Get<Mesh>(L"Sphere");
+    if (findMesh)
+        return findMesh;*/
+
+    float radius = 0.5f; // ±¸ÀÇ ¹ÝÁö¸§
+    int stackCount = 20; // °¡·Î ºÐÇÒ
+    int sliceCount = 20; // ¼¼·Î ºÐÇÒ
+
+    vector<Vertex> vec;
+
+    Vertex v;
+
+    // ºÏ±Ø
+    v.pos = Vector3(0.0f, radius, 0.0f);
+    v.uv = Vector2(0.5f, 0.0f);
+    v.normal = v.pos;
+    D3DXVec3Normalize(&v.normal, &v.normal);
+    //v.normal.Normalize();
+    v.tangent = Vector3(1.0f, 0.0f, 1.0f);
+    vec.push_back(v);
+
+    float stackAngle = /*XM_PI*/3.141592f / stackCount;
+    float sliceAngle = /*XM_2PI*/6.28318f / sliceCount;
+
+    float deltaU = 1.f / static_cast<float>(sliceCount);
+    float deltaV = 1.f / static_cast<float>(stackCount);
+
+    // °í¸®¸¶´Ù µ¹¸é¼­ Á¤Á¡À» °è»êÇÑ´Ù (ºÏ±Ø/³²±Ø ´ÜÀÏÁ¡Àº °í¸®°¡ X)
+    for (int y = 1; y <= stackCount - 1; ++y)
+    {
+        float phi = y * stackAngle;
+
+        // °í¸®¿¡ À§Ä¡ÇÑ Á¤Á¡
+        for (int x = 0; x <= sliceCount; ++x)
+        {
+            float theta = x * sliceAngle;
+
+            v.pos.x = radius * sinf(phi) * cosf(theta);
+            v.pos.y = radius * cosf(phi);
+            v.pos.z = radius * sinf(phi) * sinf(theta);
+
+            v.uv = Vector2(deltaU * x, deltaV * y);
+
+            v.normal = v.pos;
+            D3DXVec3Normalize(&v.normal, &v.normal);
+            //v.normal.Normalize();
+
+            v.tangent.x = -radius * sinf(phi) * sinf(theta);
+            v.tangent.y = 0.0f;
+            v.tangent.z = radius * sinf(phi) * cosf(theta);
+            D3DXVec3Normalize(&v.tangent, &v.tangent);
+            //v.tangent.Normalize();
+
+            vec.push_back(v);
+        }
+    }
+
+    // ³²±Ø
+    v.pos = Vector3(0.0f, -radius, 0.0f);
+    v.uv = Vector2(0.5f, 1.0f);
+    v.normal = v.pos;
+    D3DXVec3Normalize(&v.normal, &v.normal);
+    //v.normal.Normalize();
+    v.tangent = Vector3(1.0f, 0.0f, 0.0f);
+    vec.push_back(v);
+
+    vector<WORD> idx(36);
+
+    // ºÏ±Ø ÀÎµ¦½º
+    for (int i = 0; i <= sliceCount; ++i)
+    {
+        //  [0]
+        //   |  \
+		//  [i+1]-[i+2]
+        idx.push_back(0);
+        idx.push_back(i + 2);
+        idx.push_back(i + 1);
+    }
+
+    // ¸öÅë ÀÎµ¦½º
+    int ringVertexCount = sliceCount + 1;
+    for (int y = 0; y < stackCount - 2; ++y)
+    {
+        for (int x = 0; x < sliceCount; ++x)
+        {
+            //  [y, x]-[y, x+1]
+            //  |		/
+            //  [y+1, x]
+            idx.push_back(1 + (y)*ringVertexCount + (x));
+            idx.push_back(1 + (y)*ringVertexCount + (x + 1));
+            idx.push_back(1 + (y + 1) * ringVertexCount + (x));
+            //		 [y, x+1]
+            //		 /	  |
+            //  [y+1, x]-[y+1, x+1]
+            idx.push_back(1 + (y + 1) * ringVertexCount + (x));
+            idx.push_back(1 + (y)*ringVertexCount + (x + 1));
+            idx.push_back(1 + (y + 1) * ringVertexCount + (x + 1));
+        }
+    }
+
+    // ³²±Ø ÀÎµ¦½º
+    int bottomIndex = static_cast<int>(vec.size()) - 1;
+    int lastRingStartIndex = bottomIndex - ringVertexCount;
+    for (int i = 0; i < sliceCount; ++i)
+    {
+        //  [last+i]-[last+i+1]
+        //  |      /
+        //  [bottom]
+        idx.push_back(bottomIndex);
+        idx.push_back(lastRingStartIndex + i);
+        idx.push_back(lastRingStartIndex + i + 1);
+    }
+    Mesh* mesh = new Mesh();
+    //shared_ptr<Mesh> mesh = make_shared<Mesh>();
+    mesh->Init(vec, idx);
+    //Add(L"Sphere", mesh);
+
+    return mesh;
+}
+
 void Init()
 {
-    GetMeshInfoToXFile(g_pd3dDevice, L"Tiger.x", g_pMesh, g_pMeshMaterials, g_pMeshTextures, g_dwNumMaterials);
-    tiger = new TigerObj(g_pd3dDevice, D3DXVECTOR3(0, 0, 0), g_dwNumMaterials, g_pMeshTextures, g_pMesh, g_pMeshMaterials);
-    tiger2 = new TigerObj(g_pd3dDevice, D3DXVECTOR3(0, 0, 0), g_dwNumMaterials, g_pMeshTextures, g_pMesh, g_pMeshMaterials);
-    tiger2->SetParent(tiger, D3DXVECTOR3(0, 0, 2));
+    //GetMeshInfoToXFile(g_pd3dDevice, L"Tiger.x", g_pMesh, g_pMeshMaterials, g_pMeshTextures, g_dwNumMaterials);
+    //tiger = new TigerObj(g_pd3dDevice, D3DXVECTOR3(0, 0, 0), g_dwNumMaterials, g_pMeshTextures, g_pMesh, g_pMeshMaterials);
+    //tiger2 = new TigerObj(g_pd3dDevice, D3DXVECTOR3(0, 0, 0), g_dwNumMaterials, g_pMeshTextures, g_pMesh, g_pMeshMaterials);
+    ////tiger2->SetParent(tiger, D3DXVECTOR3(0, 0, 2));
 
-    GetMeshInfoToXFile(g_pd3dDevice, L"ChessBoard.x", g_pMesh, g_pMeshMaterials, g_pMeshTextures, g_dwNumMaterials);
-    plane = new Plane(g_pd3dDevice, D3DXVECTOR3(0, 0, 0), g_dwNumMaterials, g_pMeshTextures, g_pMesh, g_pMeshMaterials);
+    //GetMeshInfoToXFile(g_pd3dDevice, L"ChessBoard.x", g_pMesh, g_pMeshMaterials, g_pMeshTextures, g_dwNumMaterials);
+    //plane = new Plane(g_pd3dDevice, D3DXVECTOR3(0, 0, 0), g_dwNumMaterials, g_pMeshTextures, g_pMesh, g_pMeshMaterials);
+    //camera = new Camera(g_pd3dDevice, D3DXVECTOR3(0.0f, 30.0f, 0.0f), D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(1.0f, 0.0f, 0.0f));
 
-    camera = new Camera(g_pd3dDevice, D3DXVECTOR3(0.0f, 30.0f, 0.0f), D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(1.0f, 0.0f, 0.0f));
+    sphere = new GameObject();
+    sphere->AddComponent(new Transform());
+    MeshRenderer* meshrenderer = new MeshRenderer();
+    Mesh* mesh = LoadSphereMesh();
+    meshrenderer->setMesh(mesh);
+    sphere->AddComponent(meshrenderer);
+    //obj1->AddComponent()
 }
 
-INT WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPWSTR lpCmdLine, _In_ int  nCmdShow)
-{
 
-	InitD3D(hInstance, nCmdShow, 1500, 1000, g_pD3D, g_pd3dDevice);
-
-    Init();
-
-	EnterMsgLoop(Render);
-}
+//void KeyInput()
+//{
+//    int x=0, z=0;
+//
+//    if (InputManager::instance()->KeyIsPressed(KEY_TYPE::W))
+//    {
+//        if (OnClicked)
+//        {
+//            camera->FowardMove();
+//        }
+//        else
+//        {
+//            tiger->DirectionMove(D3DXVECTOR3(1, 0, 0));
+//        }
+//    }
+//    else if (InputManager::instance()->KeyIsPressed(KEY_TYPE::A))
+//    {
+//        //z = 1;
+//        
+//        if (OnClicked)
+//        {
+//            camera->LeftMove();
+//        }
+//        else
+//        {
+//            tiger->DirectionMove(D3DXVECTOR3(0, 0, 1));
+//        }
+//    }
+//
+//    else if (InputManager::instance()->KeyIsPressed(KEY_TYPE::S))
+//    {
+//        //x = -1;
+//        
+//        if (OnClicked)
+//        {
+//            camera->BackMove();
+//        }
+//        else
+//        {
+//            tiger->DirectionMove(D3DXVECTOR3(-1, 0, 0));
+//        }
+//    }
+//
+//    else if (InputManager::instance()->KeyIsPressed(KEY_TYPE::D))
+//    {
+//        //z = -1;
+//        
+//        if (OnClicked)
+//        {
+//            camera->RightMove();
+//        }
+//        else
+//        {
+//            tiger->DirectionMove(D3DXVECTOR3(0, 0, -1));
+//        }
+//    }
+//    
+//}
 
 VOID SetupMatrices(int index)
 {
@@ -75,70 +335,10 @@ VOID SetupMatrices(int index)
     g_pd3dDevice->SetTransform(D3DTS_PROJECTION, &matProj);
 }
 
-void KeyInput()
-{
-    int x=0, z=0;
-
-    if (InputManager::instance()->KeyIsPressed(KEY_TYPE::W))
-    {
-        if (OnClicked)
-        {
-            camera->FowardMove();
-        }
-        else
-        {
-            tiger->DirectionMove(D3DXVECTOR3(1, 0, 0));
-        }
-    }
-    else if (InputManager::instance()->KeyIsPressed(KEY_TYPE::A))
-    {
-        //z = 1;
-        
-        if (OnClicked)
-        {
-            camera->LeftMove();
-        }
-        else
-        {
-            tiger->DirectionMove(D3DXVECTOR3(0, 0, 1));
-        }
-    }
-
-    else if (InputManager::instance()->KeyIsPressed(KEY_TYPE::S))
-    {
-        //x = -1;
-        
-        if (OnClicked)
-        {
-            camera->BackMove();
-        }
-        else
-        {
-            tiger->DirectionMove(D3DXVECTOR3(-1, 0, 0));
-        }
-    }
-
-    else if (InputManager::instance()->KeyIsPressed(KEY_TYPE::D))
-    {
-        //z = -1;
-        
-        if (OnClicked)
-        {
-            camera->RightMove();
-        }
-        else
-        {
-            tiger->DirectionMove(D3DXVECTOR3(0, 0, -1));
-        }
-    }
-    
-}
-
-
 bool Render(float time)
 {
     //DeltaTime = time;
-    KeyInput();
+    //KeyInput();
 
     if (g_pd3dDevice != NULL)
     {
@@ -148,15 +348,15 @@ bool Render(float time)
         // Begin the scene
         if (SUCCEEDED(g_pd3dDevice->BeginScene()))
         {
-            //SetupMatrices(0);
+            SetupMatrices(0);
             //tiger->Translation(InputManager::instance()->GetVertivalAxis()*DeltaTime * 10.f, 0, 0);
             //tiger->Translation(0, 0, -InputManager::instance()->GetHorizentalAxis() * DeltaTime*10.f);
 
-            tiger->Render();
+            /*tiger->Render();
             tiger2->Render();
             plane->Render();
-            camera->Render();
-
+            camera->Render();*/
+            dynamic_cast<MeshRenderer*>(sphere->GetComponent(COMPONENT_TYPE::MESH_RENDERER))->Render();
             // End the scene
             g_pd3dDevice->EndScene();
         }
@@ -209,8 +409,8 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
             StartMousePos = MoveMousePos;
 
-            camera->YawRotation(ChangeRotVal.y);
-            camera->PitchRotation(ChangeRotVal.x);
+            //camera->YawRotation(ChangeRotVal.y);
+            //camera->PitchRotation(ChangeRotVal.x);
         }
         break;
 
@@ -231,3 +431,20 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
     return DefWindowProc(hWnd, msg, wParam, lParam);
 }
+
+
+LPDIRECT3DDEVICE9 GetDevice()
+{
+    return g_pd3dDevice;
+}
+
+INT WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPWSTR lpCmdLine, _In_ int  nCmdShow)
+{
+
+    InitD3D(hInstance, nCmdShow, 1500, 1000, g_pD3D, g_pd3dDevice);
+
+    Init();
+
+    EnterMsgLoop(Render);
+}
+
