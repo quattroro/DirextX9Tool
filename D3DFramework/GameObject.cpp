@@ -1,6 +1,9 @@
 #include "pch.h"
 #include "GameObject.h"
 #include "MonoBehaviour.h"
+#include "Transform.h"
+#include "MeshRenderer.h"
+#include "Camera.h"
 
 
 GameObject::GameObject() :Object(OBJECT_TYPE::GAMEOBJECT)
@@ -90,6 +93,7 @@ Component* GameObject::GetComponent(COMPONENT_TYPE type)
 
 void GameObject::AddComponent(Component* component)
 {
+	component->SetGameObject(this);
 
 	COMPONENT_TYPE type = component->GetType();
 	if (type != COMPONENT_TYPE::MONO_BEHAVIOUR)
@@ -105,6 +109,30 @@ void GameObject::AddComponent(Component* component)
 	}
 
 }
+
+Transform* GameObject::GetTransform()
+{
+	Component* component = GetComponent(COMPONENT_TYPE::TRANSFORM);
+	return dynamic_cast<Transform*>(component);
+}
+
+MeshRenderer* GameObject::GetMeshRenderer()
+{
+	Component* component = GetComponent(COMPONENT_TYPE::MESH_RENDERER);
+	return dynamic_cast<MeshRenderer*>(component);
+}
+
+Camera* GameObject::GetCamera()
+{
+	Component* component = GetComponent(COMPONENT_TYPE::CAMERA);
+	return dynamic_cast<Camera*>(component);
+}
+
+//Light* GameObject::GetLight()
+//{
+//	Component* component = GetComponent(COMPONENT_TYPE::TRANSFORM);
+//	return dynamic_cast<Light*>(component);
+//}
 
 #pragma region  Transform으로 이전
 ////이동을 할때는 하위에 같은 게임오브젝트가 있으면 같이 이동을 시킨다.

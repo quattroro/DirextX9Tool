@@ -1,16 +1,42 @@
 #include "pch.h"
 #include "SceneManager.h"
+#include "Scene.h"
+
+void SceneManager::Update()
+{
+	if (_activeScene == nullptr)
+		return;
+
+	_activeScene->Update();
+	_activeScene->LateUpdate();
+	_activeScene->FinalUpdate();
+}
+
+void SceneManager::Render()
+{
+	if (_activeScene != nullptr)
+		_activeScene->Render();
+}
 
 
-//void SceneManager::Update()
-//{
-//	if (_activeScene == nullptr)
-//		return;
-//
-//	_activeScene->Update();
-//	_activeScene->LateUpdate();
-//	_activeScene->FinalUpdate();
-//}
+void SceneManager::LoadScene(wstring sceneName)
+{
+	// TODO : 기존 Scene 정리
+	// TODO : 파일에서 Scene 정보 로드
+
+	_activeScene = LoadTestScene();
+
+	_activeScene->Awake();
+	_activeScene->Start();
+}
+
+
+Scene* SceneManager::LoadTestScene()
+{
+
+	return nullptr;
+}
+
 
 //// TEMP
 //void SceneManager::Render()
@@ -38,3 +64,16 @@
 //
 //	ShowFps();
 //}
+
+SceneManager::SceneManager()
+{
+}
+
+SceneManager::~SceneManager()
+{
+}
+
+void SceneManager::CreateScene()
+{
+}
+

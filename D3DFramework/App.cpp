@@ -7,6 +7,8 @@
 #include "Transform.h"
 #include "Mesh.h"
 #include "MeshRenderer.h"
+#include "SceneManager.h"
+#include "Scene.h"
 
 extern float DeltaTime;
 extern HWND hWndMain;
@@ -36,7 +38,7 @@ D3DXVECTOR2 MoveMousePos;
 D3DXVECTOR2 StartMousePos;
 
 GameObject* sphere;
-
+SceneManager* scenemanager = new SceneManager();
 
 
 
@@ -244,6 +246,8 @@ void Init()
     //GetMeshInfoToXFile(g_pd3dDevice, L"ChessBoard.x", g_pMesh, g_pMeshMaterials, g_pMeshTextures, g_dwNumMaterials);
     //plane = new Plane(g_pd3dDevice, D3DXVECTOR3(0, 0, 0), g_dwNumMaterials, g_pMeshTextures, g_pMesh, g_pMeshMaterials);
     //camera = new Camera(g_pd3dDevice, D3DXVECTOR3(0.0f, 30.0f, 0.0f), D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(1.0f, 0.0f, 0.0f));
+   
+    Scene* scene = new Scene();
 
     sphere = new GameObject();
     sphere->AddComponent(new Transform());
@@ -251,6 +255,9 @@ void Init()
     Mesh* mesh = LoadSphereMesh();
     meshrenderer->setMesh(mesh);
     sphere->AddComponent(meshrenderer);
+
+    scene->AddGameObject(sphere);
+    scenemanager->TempAddScene(scene);
     //obj1->AddComponent()
 }
 
@@ -356,7 +363,9 @@ bool Render(float time)
             tiger2->Render();
             plane->Render();
             camera->Render();*/
-            dynamic_cast<MeshRenderer*>(sphere->GetComponent(COMPONENT_TYPE::MESH_RENDERER))->Render();
+            //dynamic_cast<MeshRenderer*>(sphere->GetComponent(COMPONENT_TYPE::MESH_RENDERER))->Render();
+            //Scene->
+            scenemanager->Render();
             // End the scene
             g_pd3dDevice->EndScene();
         }

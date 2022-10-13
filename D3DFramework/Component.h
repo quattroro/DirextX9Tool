@@ -1,6 +1,11 @@
 #pragma once
 #include "Object.h"
 
+class GameObject;
+class Transform;
+
+
+
 enum class COMPONENT_TYPE
 {
 	TRANSFORM,
@@ -31,14 +36,16 @@ public:
 	virtual void LateUpdate() {}
 	virtual void FinalUpdate() {}
 
+	GameObject* GetGameObject();
+	Transform* GetTransform();
 
 public:
 	COMPONENT_TYPE GetType() { return _type; }
-	//void SetGameObject(GameObject* gameObject) { _gameObject = gameObject; }
+	void SetGameObject(GameObject* gameObject) { _gameObject = gameObject; }
 
 
 private:
 	COMPONENT_TYPE _type;
-	//GameObject* _gameObject;//게임 오브젝트와 서로서로 가지고 있는다 필요하면 사용
+	GameObject* _gameObject;//게임 오브젝트와 서로서로 가지고 있는다 필요하면 사용
 };
 

@@ -3,14 +3,18 @@
 #pragma comment(lib, "d3dx9.lib")
 #pragma comment(lib, "winmm.lib")
 
+
 #include <Windows.h>
 #include <mmsystem.h>
 #include <d3dx9.h>
 #include <d3d9.h>
+#include <d3dx9shader.h>
 #include <strsafe.h>
 #include <string>
 #include <vector>
 #include <memory>
+#include <math.h>
+
 
 #define D3DFVF_CUSTOMVERTEX (D3DFVF_XYZ|D3DFVF_TEX1|D3DFVF_XYZ|D3DFVF_XYZ)
 
@@ -22,7 +26,7 @@ using Vector2 = D3DXVECTOR2;
 using Matrix = D3DXMATRIXA16;
 using Quaternion = D3DXQUATERNION;
 
-
+const float PI = (float)(3.141592741);
 
 struct Vertex
 {

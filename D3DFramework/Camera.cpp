@@ -1,4 +1,59 @@
 #include "pch.h"
+#include "Camera.h"
+#include "Transform.h"
+#include "GameObject.h"
+
+extern float WindowWidth;
+extern float WindowHeight;
+
+Camera::Camera():Component(COMPONENT_TYPE::CAMERA)
+{
+
+}
+
+Camera::~Camera()
+{
+
+}
+
+void Camera::FinalUpdate()
+{
+	//월드행렬의 역행렬이 뷰 행렬이 된다
+	//모든 오브젝트에 해당 행렬연산을 하줌으로써 모든 물체가 카메라 기준의 원점으로 이동하도록 한다.
+	D3DXMatrixInverse(&_matView, 0, &GetTransform()->GetLocalToWorldMatrix());
+
+	if (_type == PROJECTION_TYPE::PERSPECTIVE)
+	{
+		D3DXMatrixPerspectiveFovLH(&_matProjection, _fov, WindowWidth / WindowHeight, _near, _far);
+	}
+	else
+	{
+		D3DXMatrixOrthoLH(&_matProjection, WindowWidth * _scale, WindowHeight * _scale, _near, _far);
+	}
+
+	/*S_MatView = _matView;
+	S_MatProjection = _matProjection;*/
+
+
+}
+
+
+
+//씬에 있는 모든 오브젝트들의 렌더를 카메라에서 해준다.
+void Camera::Render()
+{
+	
+
+}
+
+
+
+
+
+
+
+
+
 //#include "Camera.h"
 //#include "Utility.h"
 //

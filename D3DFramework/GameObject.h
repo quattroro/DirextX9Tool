@@ -9,6 +9,9 @@
 
 class Transform;
 class MonoBehaviour;
+class MeshRenderer;
+class Camera;
+class Light;
 
 class GameObject :public Object
 {
@@ -35,6 +38,10 @@ public:
 	Component* GetComponent(COMPONENT_TYPE type);
 	void AddComponent(Component* component);
 
+	Transform* GetTransform();
+	MeshRenderer* GetMeshRenderer();
+	Camera* GetCamera();
+	Light* GetLight();
 
 private:
 	//array<Component* , FIXED_COMPONENT_COUNT> _components;

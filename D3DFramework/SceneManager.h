@@ -10,19 +10,19 @@ public:
 	SceneManager();
 	virtual ~SceneManager();
 
-
 	void Update();
 	void Render();
-
-
-	void LoadScene(string sceneName);
+	void LoadScene(wstring sceneName);
 	
+	Scene* GetActiveScene() { return _activeScene; }
+
 	void CreateScene();
+	Scene* LoadTestScene();
 
-	
+	void TempAddScene(Scene* scene) { _activeScene = scene; }
 
 private:
-	Scene* Scenes;
-
+	vector<Scene*> _cenes;
+	Scene* _activeScene;
 };
 
