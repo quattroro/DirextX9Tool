@@ -52,7 +52,7 @@ HRESULT InitD3D(HINSTANCE hInstance, int nCmdShow , float width, float height, L
     }
 
     // Turn on the zbuffer
-    g_pd3dDevice->SetRenderState(D3DRS_ZENABLE, TRUE);
+    g_pd3dDevice->SetRenderState(D3DRS_LIGHTING, false);
 
     // Turn on ambient lighting 
     g_pd3dDevice->SetRenderState(D3DRS_AMBIENT, 0xffffffff);

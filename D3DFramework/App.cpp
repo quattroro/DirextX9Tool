@@ -350,7 +350,7 @@ bool Render(float time)
     if (g_pd3dDevice != NULL)
     {
         // Clear the backbuffer and the zbuffer
-        g_pd3dDevice->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB(0, 0, 255), 1.0f, 0);
+        g_pd3dDevice->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB(0, 0, 0), 1.0f, 0);
 
         // Begin the scene
         if (SUCCEEDED(g_pd3dDevice->BeginScene()))

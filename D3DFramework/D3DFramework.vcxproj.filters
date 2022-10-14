@@ -133,5 +133,8 @@
     <None Include="..\Resources\Shader\default.hlsli" />
     <None Include="..\Resources\Shader\params.hlsli" />
     <None Include="..\Resources\Shader\utils.hlsli" />
+    <None Include="temp.hlsli">
+      <Filter>소스 파일</Filter>
+    </None>
   </ItemGroup>
 </Project>

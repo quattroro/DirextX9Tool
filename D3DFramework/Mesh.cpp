@@ -23,6 +23,9 @@ void Mesh::Init(const vector<Vertex>& vertexBuffer, const vector<WORD>& indexBuf
 
 void Mesh::Render()
 {
+	//g_pd3dDevice->SetVertexDeclaration()
+	//g_pd3dDevice->SetVertexShader()
+
 
 	g_pd3dDevice->SetStreamSource(0, _vertexBuffer, 0, sizeof(Vertex));
 	g_pd3dDevice->SetIndices(_indexBuffer);
