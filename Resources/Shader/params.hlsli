@@ -38,6 +38,7 @@ cbuffer TRANSFORM_PARAMS : register(b1)
 
     row_major/*행렬 접근순서가 셰이더랑 다렉이랑 다르기 때문에 순서를 맞춰주기 위해서*/  matrix g_matWVP;
 };
+
 //메테리얼과 관련된 인자들을 넘겨 받는다.
 cbuffer MATERIAL_PARAMS : register(b2)
 {

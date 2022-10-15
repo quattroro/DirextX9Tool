@@ -44,11 +44,11 @@ void Scene::Update()
 }
 
 //조명에 대한 정보들을 여기서 만들어 준다.
-void Scene::Render()
+void Scene::Render(Shader* shader)
 {
 	for (GameObject* gameObject : _gameObjects)
 	{
-		gameObject->GetMeshRenderer()->Render();
+		gameObject->GetMeshRenderer()->Render(shader);
 	}
 
 	////조명에 대한 정보들을 여기서 만들어 준다.

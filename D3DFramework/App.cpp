@@ -9,6 +9,7 @@
 #include "MeshRenderer.h"
 #include "SceneManager.h"
 #include "Scene.h"
+#include "Shader.h"
 
 extern float DeltaTime;
 extern HWND hWndMain;
@@ -40,7 +41,7 @@ D3DXVECTOR2 StartMousePos;
 GameObject* sphere;
 SceneManager* scenemanager = new SceneManager();
 
-
+Shader* shader;
 
 Mesh* LoadCubeMesh()
 {
@@ -166,6 +167,7 @@ Mesh* LoadSphereMesh()
             v.tangent.x = -radius * sinf(phi) * sinf(theta);
             v.tangent.y = 0.0f;
             v.tangent.z = radius * sinf(phi) * cosf(theta);
+
             D3DXVec3Normalize(&v.tangent, &v.tangent);
             //v.tangent.Normalize();
 
@@ -258,6 +260,9 @@ void Init()
 
     scene->AddGameObject(sphere);
     scenemanager->TempAddScene(scene);
+
+    shader->Init(L"../Resources/Shader/Test.hlsli");
+
     //obj1->AddComponent()
 }
 
@@ -328,7 +333,7 @@ VOID SetupMatrices(int index)
     D3DXMATRIXA16 scalemat;
 
 
-    D3DXVECTOR3 vEyePt(0.0f, 30.0f, 0.0f);
+    D3DXVECTOR3 vEyePt(5.0f, 5.0f, 0.0f);
     D3DXVECTOR3 vLookatPt(0.0f, 0.0f, 0.0f);
     D3DXVECTOR3 vUpVec(-1.0f, 0.0f, 0.0f);
 
@@ -365,7 +370,7 @@ bool Render(float time)
             camera->Render();*/
             //dynamic_cast<MeshRenderer*>(sphere->GetComponent(COMPONENT_TYPE::MESH_RENDERER))->Render();
             //Scene->
-            scenemanager->Render();
+            scenemanager->Render(shader);
             // End the scene
             g_pd3dDevice->EndScene();
         }

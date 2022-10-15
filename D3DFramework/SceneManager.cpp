@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "SceneManager.h"
 #include "Scene.h"
+#include "Shader.h"
 
 void SceneManager::Update()
 {
@@ -12,10 +13,10 @@ void SceneManager::Update()
 	_activeScene->FinalUpdate();
 }
 
-void SceneManager::Render()
+void SceneManager::Render(Shader* shader)
 {
 	if (_activeScene != nullptr)
-		_activeScene->Render();
+		_activeScene->Render(shader);
 }
 
 

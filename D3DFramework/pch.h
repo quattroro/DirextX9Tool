@@ -21,6 +21,7 @@
 using namespace std;
 
 
+using Vector4 = D3DXVECTOR4;
 using Vector3 = D3DXVECTOR3;
 using Vector2 = D3DXVECTOR2;
 using Matrix = D3DXMATRIXA16;

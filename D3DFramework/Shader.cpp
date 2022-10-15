@@ -5,6 +5,10 @@ extern LPDIRECT3DDEVICE9   g_pd3dDevice;
 
 Shader::Shader():Object(OBJECT_TYPE::SHADER)
 {
+	
+
+
+
 }
 
 Shader::~Shader()
@@ -13,6 +17,14 @@ Shader::~Shader()
 
 void Shader::Init(const wstring& path)
 {
+	//D3DVERTEXELEMENT9	decl[3];
+	// FVF를 사용해서 정점선언값을 자동으로 채워넣는다
+	//D3DXDeclaratorFromFVF(D3DFVF_CUSTOMVERTEX, decl);
+	// 정점선언값으로 g_pDecl을 생성한다.
+	//g_pd3dDevice->CreateVertexDeclaration(decl, &g_pDecl);
+
+	CreateVertexShader(path, "VS_Main", "vs_2_0");
+	CreatePixelShader(path, "PS_Main", "ps_2_0");
 }
 
 void Shader::Update()
@@ -27,7 +39,7 @@ void Shader::CreateShader()
 	LPD3DXCONSTANTTABLE pTbv;
 	//해당 함수로 셰이더를 읽어오고
 	D3DXCompileShaderFromFile(
-		L"../Resources/shader/default.hlsli"
+		L"../Resources/shader/Test.hlsli"
 		, NULL
 		, NULL
 		,/*진입점 함수*/"VS_Main"
@@ -64,7 +76,11 @@ void Shader::CreateVertexShader(const wstring& path, const string& name, const s
 		, &pTbv//셰이더의 상수 테이블 데이터
 	);
 
-	
+
+
+
+	//g_pd3dDevice->CreateVertexDeclaration
+
 	g_pd3dDevice->CreateVertexShader((DWORD*)buff->GetBufferPointer(), &_verShader);
 }
 

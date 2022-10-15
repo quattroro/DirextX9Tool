@@ -12,10 +12,10 @@ MeshRenderer::~MeshRenderer()
 {
 }
 
-void MeshRenderer::Render()
+void MeshRenderer::Render(Shader* shader)
 {
 	//Material->PushData();
-	_mesh->Render();
+	_mesh->Render(shader);
 }
 
 

@@ -19,8 +19,10 @@ private:
 	//void CreateShader(const wstring& path, const string& name, const string& version, ComPtr<ID3DBlob>& blob, D3D12_SHADER_BYTECODE& shaderByteCode);
 	//void CreateVertexShader(const wstring& path, const string& name, const string& version);
 	//void CreatePixelShader(const wstring& path, const string& name, const string& version);
-private:
+public:
 	LPDIRECT3DVERTEXSHADER9 _verShader;
 	LPDIRECT3DPIXELSHADER9 _pixShader;
+	//
+	LPDIRECT3DVERTEXDECLARATION9 g_pDecl = NULL;
 };
 

@@ -1,6 +1,6 @@
 #pragma once
 class GameObject;
-
+class Shader;
 class Scene
 {
 public:
@@ -10,7 +10,7 @@ public:
 	void FinalUpdate();
 	void Update();
 
-	void Render();
+	void Render(Shader* shader);
 
 private:
 	void PushLightData();

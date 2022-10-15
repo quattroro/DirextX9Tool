@@ -11,7 +11,7 @@ public:
 	virtual ~SceneManager();
 
 	void Update();
-	void Render();
+	void Render(Shader* shader);
 	void LoadScene(wstring sceneName);
 	
 	Scene* GetActiveScene() { return _activeScene; }

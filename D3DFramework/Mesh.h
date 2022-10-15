@@ -1,6 +1,7 @@
 #pragma once
 #include "Object.h"
 
+class Shader;
 
 //¸Þ½¬
 class Mesh:public Object
@@ -11,7 +12,7 @@ public:
 
 	void Init(const vector<Vertex>& vertexBuffer, const vector<WORD>& indexBuffer);
 
-	void Render();
+	void Render(Shader* shader);
 
 private:
 	void CreateVertecBuffer(const vector<Vertex>& buffer);

@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Mesh.h"
 #include "Utility.h"
+#include "Shader.h"
 
 extern float DeltaTime;
 extern HWND hWndMain;
@@ -21,10 +22,10 @@ void Mesh::Init(const vector<Vertex>& vertexBuffer, const vector<WORD>& indexBuf
 	CreateIndexBuffer(indexBuffer);
 }
 
-void Mesh::Render()
+void Mesh::Render(Shader* shader)
 {
-	//g_pd3dDevice->SetVertexDeclaration()
-	//g_pd3dDevice->SetVertexShader()
+	//g_pd3dDevice->SetVertexDeclaration(shader->g_pDecl);
+	g_pd3dDevice->SetVertexShader(shader->_verShader);
 
 
 	g_pd3dDevice->SetStreamSource(0, _vertexBuffer, 0, sizeof(Vertex));
