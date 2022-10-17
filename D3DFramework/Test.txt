@@ -1,0 +1,24 @@
+
+martix VeiwProjMatrix;
+
+vector Blue = {0.0f,0.0f,1.0f,1.0f};
+
+struct VS_INPUT
+{
+	vector postiton : POSITION;
+};
+
+struct VS_OUTPUT
+{
+	vector position : POSITION;
+	vector diffuse : COLOR;
+};
+
+VS_OUTPUT VS_Main(VS_INPUT input)
+{
+	VS_OUTPUT output = (VS_OUTPUT)0;
+	output.position = mul(input.position, VeiwProjMatrix);
+	output.diffuse = Blue;
+
+	return output;
+}
