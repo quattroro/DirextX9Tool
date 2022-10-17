@@ -136,6 +136,6 @@
     <None Include="temp.hlsli">
       <Filter>소스 파일</Filter>
     </None>
-    <None Include="Test.hlsli" />
+    <None Include="..\Resources\Shader\Test.hlsli" />
   </ItemGroup>
 </Project>

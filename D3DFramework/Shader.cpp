@@ -24,7 +24,7 @@ void Shader::Init(const wstring& path)
 	//g_pd3dDevice->CreateVertexDeclaration(decl, &g_pDecl);
 
 	CreateVertexShader(path, "VS_Main", "vs_2_0");
-	CreatePixelShader(path, "PS_Main", "ps_2_0");
+	//CreatePixelShader(path, "PS_Main", "ps_2_0");
 }
 
 void Shader::Update()
@@ -39,7 +39,7 @@ void Shader::CreateShader()
 	LPD3DXCONSTANTTABLE pTbv;
 	//해당 함수로 셰이더를 읽어오고
 	D3DXCompileShaderFromFile(
-		L"../Resources/shader/Test.hlsli"
+		"../Resources/shader/Test.hlsli"
 		, NULL
 		, NULL
 		,/*진입점 함수*/"VS_Main"
@@ -71,6 +71,60 @@ void Shader::CreateShader()
 	//	/*동일한 용도 내에서 다수의 버텍스 요소를 식별하는데 이용*/
 	//}
 
+	//하나의 위치벡터와 3개의 법선벡터
+	D3DVERTEXELEMENT9 decl[]
+	{
+		{0,0,D3DDECLTYPE_FLOAT3, D3DDECLMETHOD_DEFAULT, D3DDECLUSAGE_POSITION,0},
+		{0,12,D3DDECLTYPE_FLOAT3, D3DDECLMETHOD_DEFAULT, D3DDECLUSAGE_NORMAL,0},
+		{0,24,D3DDECLTYPE_FLOAT3, D3DDECLMETHOD_DEFAULT, D3DDECLUSAGE_NORMAL,1},
+		{0,36,D3DDECLTYPE_FLOAT3, D3DDECLMETHOD_DEFAULT, D3DDECLUSAGE_NORMAL,2},
+		D3DDECL_END()
+	};
+
+	IDirect3DVertexDeclaration9* _decl = 0;
+	HRESULT hr = g_pd3dDevice->CreateVertexDeclaration(decl, &_decl);
+	g_pd3dDevice->SetVertexDeclaration(_decl); // SetFVF 대신 사용 set fvf도 내부적으로 Decl로 변형된다.
+
+	/*버텍스 셰이더 입력 구조체의 데이터 멤버를 연결하는 앱을 정의하는 방법이 된다*/
+	//실제 셰이더 코드에서의 입력 구조체
+	/*struct VS_INPUT
+	{
+		vector position : POSITION;
+		vector normal : NORMAL0;
+		vector faceNormal : NORMAL1;
+		vector faceNormal : NORMAL2;
+	};
+	요소  0은 decl이고 용도 POSITION과 용도 인덱스 0으로 식별되며 position으로 매핑된다.
+	요소 1은 decl이고 용도 NORMAL과 용도 인덱스 0으로 식별되며 normal로 매핑된다.
+	요소 2는 decl이고 용도 NORMAL과 용도 인덱스 1로 식별되며 faceNormal1로 매핑된다.....*/
+
+	/*버텍스 입력 용도들
+	POSITION -> 위치
+	BLENDWEIGHTS -> 블렌드 가중치
+	BLENDINDICES -> 블렌드 인덱스
+	NORMAL -> 법선 벡터
+	PSIZE -> 버텍스 포인트 크기
+	DIFFUSE -> 난반사 컬러
+	SPECULAR -> 정반사 컬러
+	TEXCOORD -> 텍스쳐 좌표
+	TANGENT -> 접선 벡터
+	BINORMAL -> 이중법선 벡터
+	TESSFACTOR -> 세분화 인수*/
+
+	/*버텍스 출력 용도들
+	POSITION -> 위치
+	PSIZE -> 버텍스 포인트 크기
+	FOG -> 안개 블렌드 값
+	COLOR -> 버텍스 컬러, 다수의 버텍스 컬러를 출력 할 수 있다는 데 주의할것 이 컬러는 블렌드되어 최종 컬러를 만들어 낸다.
+	TEXCOORD -> 버텍스 텍스쳐 좌표, 다수의 텍스쳐 좌표를 출력할 수 있다는 데 주의*/
+
+	/*1. 버텍스 셰이더를 작성하고 컴파일 한다.
+	  2. 컴파일된 셰이더 코드를 기반으로 버텍스 셰이더를 나타내는 IDirect3DVertexShader9 인터페이스를 만든가.
+	  3. IDirect3DDevice9::SetVertexShader 메서드를 이용해 버텍스 셰이더를 활성화 한다.*/
+
+	//이용이 끝난 뒤에는 Release를 이용해 셰이더를 제거해야 한다.
+	//d3d::Release<IDirec>
+
 
 }
 
@@ -80,19 +134,16 @@ void Shader::CreateVertexShader(const wstring& path, const string& name, const s
 	LPD3DXBUFFER buff = NULL;
 	LPD3DXBUFFER err = NULL;
 	DWORD dwFlags = 0;
-
-	
-
-
 	LPD3DXCONSTANTTABLE pTbv;//해당 셰이더의 컨스턴트 테이블을 받아온다.
+
 	//LPD3DXCONSTANTTABLE pTbv
 	//해당 함수로 셰이더를 읽어오고
 	HRESULT r = D3DXCompileShaderFromFile(
-		L"Test.txt"
+		"Test.txt"
 		, NULL
 		, NULL
 		, "VS_Main"/*진입점 함수*/
-		, "vs_2_0"/*버전*/
+		, "vs_1_1"/*버전*/
 		, dwFlags//컴파일 플래그
 		, &buff//컴파일된 셰이더 코드를 가지는 ID3DXBUFFER포인터
 		, &err//에러메시지 가지는 ID3DXBUFFER포인터
@@ -101,7 +152,7 @@ void Shader::CreateVertexShader(const wstring& path, const string& name, const s
 
 	if(err)
 	{
-		::MessageBox(0, (WCHAR*)err->GetBufferPointer(), 0, 0);
+		::MessageBox(0, (char*)err->GetBufferPointer(), 0, 0);
 		//Release<>
 	}
 
@@ -126,8 +177,13 @@ void Shader::CreateVertexShader(const wstring& path, const string& name, const s
 	//배열을 지정할 때에는 마지막에 배열의 크기 속성이 추가된다.
 
 	//g_pd3dDevice->CreateVertexDeclaration
-
+	_verShader = nullptr;
 	g_pd3dDevice->CreateVertexShader((DWORD*)buff->GetBufferPointer(), &_verShader);
+
+	Release<LPD3DXBUFFER>(buff);
+
+	//D3DXHANDLE ViewProjMatrixHandle = pTbv->GetConstantByName(0, "VeiwProjMatrix");
+	//pTbv->SetMatrix(g_pd3dDevice,ViewProjMatrixHandle,)
 }
 
 void Shader::CreatePixelShader(const wstring& path, const string& name, const string& version)
@@ -138,11 +194,11 @@ void Shader::CreatePixelShader(const wstring& path, const string& name, const st
 	LPD3DXCONSTANTTABLE pTbv;
 	//해당 함수로 셰이더를 읽어오고
 	D3DXCompileShaderFromFile(
-		path.c_str()
+		"Test.txt"
 		, NULL
 		, NULL
-		, name.c_str()/*진입점 함수*/
-		, version.c_str()/*버전*/
+		, "PS_Main"/*진입점 함수*/
+		, "vs_1_1"/*버전*/
 		, dwFlags//컴파일 플래그
 		, &buff//컴파일된 셰이더 코드를 가지는 ID3DXBUFFER포인터
 		, &err//에러메시지 가지는 ID3DXBUFFER포인터

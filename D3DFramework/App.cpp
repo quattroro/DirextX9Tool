@@ -261,6 +261,7 @@ void Init()
     scene->AddGameObject(sphere);
     scenemanager->TempAddScene(scene);
 
+    shader = new Shader();
     shader->Init(L"../Resources/Shader/Test.hlsli");
 
     //obj1->AddComponent()

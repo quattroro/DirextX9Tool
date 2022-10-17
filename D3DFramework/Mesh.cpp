@@ -25,7 +25,12 @@ void Mesh::Init(const vector<Vertex>& vertexBuffer, const vector<WORD>& indexBuf
 void Mesh::Render(Shader* shader)
 {
 	//g_pd3dDevice->SetVertexDeclaration(shader->g_pDecl);
-	g_pd3dDevice->SetVertexShader(shader->_verShader);
+	if (shader != nullptr)
+	{
+		g_pd3dDevice->SetVertexShader(shader->_verShader);
+		g_pd3dDevice->SetPixelShader(shader->_pixShader);
+	}
+		
 
 
 	g_pd3dDevice->SetStreamSource(0, _vertexBuffer, 0, sizeof(Vertex));

@@ -24,11 +24,11 @@ HRESULT InitD3D(HINSTANCE hInstance, int nCmdShow , float width, float height, L
     wcex.hCursor = LoadCursor(nullptr, IDC_ARROW);
     wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
     wcex.lpszMenuName = NULL;
-    wcex.lpszClassName = L"D3DFramework";
+    wcex.lpszClassName = "D3DFramework";
     
     RegisterClass(&wcex);
 
-    HWND hWnd = CreateWindow(L"D3DFramework", L"D3DFramework", WS_OVERLAPPEDWINDOW, 100, 100, width, height, nullptr, nullptr, wcex.hInstance, nullptr);
+    HWND hWnd = CreateWindow("D3DFramework", "D3DFramework", WS_OVERLAPPEDWINDOW, 100, 100, width, height, nullptr, nullptr, wcex.hInstance, nullptr);
 
     hWndMain = hWnd;
     WindowHeight = height;
@@ -64,15 +64,6 @@ HRESULT InitD3D(HINSTANCE hInstance, int nCmdShow , float width, float height, L
 
 }
 
-void Release()
-{
-
-}
-
-void Delete()
-{
-
-}
 
 bool EnterMsgLoop(bool(*render)(float time))
 {
@@ -105,7 +96,7 @@ bool EnterMsgLoop(bool(*render)(float time))
 }
 
 
-bool GetMeshInfoToXFile(LPDIRECT3DDEVICE9 g_pd3dDevice, LPCWSTR FilePath, LPD3DXMESH& pMesh, D3DMATERIAL9*& pMeshMaterials, LPDIRECT3DTEXTURE9*& pMeshTextures, DWORD& dwNumMaterials)
+bool GetMeshInfoToXFile(LPDIRECT3DDEVICE9 g_pd3dDevice, LPCSTR FilePath, LPD3DXMESH& pMesh, D3DMATERIAL9*& pMeshMaterials, LPDIRECT3DTEXTURE9*& pMeshTextures, DWORD& dwNumMaterials)
 {
     LPD3DXBUFFER pD3DXMtrlBuffer;
 
@@ -118,7 +109,7 @@ bool GetMeshInfoToXFile(LPDIRECT3DDEVICE9 g_pd3dDevice, LPCWSTR FilePath, LPD3DX
             &pD3DXMtrlBuffer, NULL, &dwNumMaterials,
             &pMesh)))
         {
-            MessageBox(NULL, L"Could not find tiger.x", L"Meshes.exe", MB_OK);
+            MessageBox(NULL, "Could not find tiger.x", "Meshes.exe", MB_OK);
             return E_FAIL;
         }
     }
@@ -158,7 +149,7 @@ bool GetMeshInfoToXFile(LPDIRECT3DDEVICE9 g_pd3dDevice, LPCWSTR FilePath, LPD3DX
                 // If texture is not in current folder, try parent folder
                 if (FAILED(D3DXCreateTextureFromFileA(g_pd3dDevice, strTexture, &pMeshTextures[j])))
                 {
-                    MessageBox(NULL, L"Could not find texture map", L"Meshes.exe", MB_OK);
+                    MessageBox(NULL, "Could not find texture map", "Meshes.exe", MB_OK);
                 }
             }
         }

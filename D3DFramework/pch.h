@@ -15,8 +15,10 @@
 #include <memory>
 #include <math.h>
 
+#include "Utility.h"
 
 #define D3DFVF_CUSTOMVERTEX (D3DFVF_XYZ|D3DFVF_TEX1|D3DFVF_XYZ|D3DFVF_XYZ)
+
 
 using namespace std;
 

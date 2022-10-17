@@ -20,8 +20,9 @@ private:
 	//void CreateVertexShader(const wstring& path, const string& name, const string& version);
 	//void CreatePixelShader(const wstring& path, const string& name, const string& version);
 public:
-	LPDIRECT3DVERTEXSHADER9 _verShader;
-	LPDIRECT3DPIXELSHADER9 _pixShader;
+	IDirect3DVertexShader9* _verShader = nullptr;
+	//LPDIRECT3DVERTEXSHADER9 _verShader = nullptr;
+	LPDIRECT3DPIXELSHADER9 _pixShader = nullptr;
 	//
 	LPDIRECT3DVERTEXDECLARATION9 g_pDecl = NULL;
 };

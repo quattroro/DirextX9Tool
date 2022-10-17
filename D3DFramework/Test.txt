@@ -1,11 +1,13 @@
 
-martix VeiwProjMatrix;
+matrix VeiwProjMatrix;
 
-vector Blue = {0.0f,0.0f,1.0f,1.0f};
+vector Blue = {0.0f,0.0f,1.0f,0.0f};
 
 struct VS_INPUT
 {
-	vector postiton : POSITION;
+	vector position : POSITION;
+	float2 uv : TEXCOORD;
+	vector normal : NORMAL;
 };
 
 struct VS_OUTPUT
@@ -17,8 +19,16 @@ struct VS_OUTPUT
 VS_OUTPUT VS_Main(VS_INPUT input)
 {
 	VS_OUTPUT output = (VS_OUTPUT)0;
-	output.position = mul(input.position, VeiwProjMatrix);
+	//output.position = mul(input.position, VeiwProjMatrix);
 	output.diffuse = Blue;
 
 	return output;
+}
+
+float4 PS_Main(VS_OUTPUT input) : SV_Target
+{
+    float4 color = float4(0.f,0.f,1.f,1.f);
+
+
+    return color;
 }
