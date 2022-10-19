@@ -22,8 +22,14 @@ private:
 public:
 	IDirect3DVertexShader9* _verShader = nullptr;
 	//LPDIRECT3DVERTEXSHADER9 _verShader = nullptr;
-	LPDIRECT3DPIXELSHADER9 _pixShader = nullptr;
+	//LPDIRECT3DPIXELSHADER9 _pixShader = nullptr;
+	IDirect3DPixelShader9* _pixShader = nullptr;
 	//
 	LPDIRECT3DVERTEXDECLARATION9 g_pDecl = NULL;
+
+	LPD3DXCONSTANTTABLE pTbv;
+
+	D3DXHANDLE g_Val_Handle = nullptr;
+
 };
 

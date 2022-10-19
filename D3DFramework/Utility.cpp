@@ -9,6 +9,10 @@ LPDIRECT3DDEVICE9   g_pd3dDevice = NULL;
 float WindowWidth;
 float WindowHeight;
 
+Matrix WorldViewMat;
+
+
+
 HRESULT InitD3D(HINSTANCE hInstance, int nCmdShow , float width, float height, LPDIRECT3D9& g_pD3D, LPDIRECT3DDEVICE9&   g_pd3dDevice)
 {
     //UNREFERENCED_PARAMETER(hInstance);

@@ -15,6 +15,7 @@ extern float DeltaTime;
 extern HWND hWndMain;
 extern LPDIRECT3D9         g_pD3D ;
 extern LPDIRECT3DDEVICE9   g_pd3dDevice ;
+extern Matrix WorldViewMat;
 
 LPD3DXMESH          g_pMesh = NULL; // Our mesh object in sysmem
 D3DMATERIAL9* g_pMeshMaterials = NULL; // Materials for our mesh
@@ -42,6 +43,9 @@ GameObject* sphere;
 SceneManager* scenemanager = new SceneManager();
 
 Shader* shader;
+
+
+
 
 Mesh* LoadCubeMesh()
 {
@@ -254,7 +258,7 @@ void Init()
     sphere = new GameObject();
     sphere->AddComponent(new Transform());
     MeshRenderer* meshrenderer = new MeshRenderer();
-    Mesh* mesh = LoadSphereMesh();
+    Mesh* mesh = LoadCubeMesh();
     meshrenderer->setMesh(mesh);
     sphere->AddComponent(meshrenderer);
 
@@ -341,11 +345,17 @@ VOID SetupMatrices(int index)
     D3DXMATRIXA16 matView;
     D3DXMatrixLookAtLH(&matView, &vEyePt, &vLookatPt, &vUpVec);
     g_pd3dDevice->SetTransform(D3DTS_VIEW, &matView);
+    //d3dxmatrix
 
+    //D3DXMatrixTranspose()
+    //D3DXMatrixTranslation(&matView, vEyePt.x, vEyePt.y, vEyePt.z);
+    //D3DXMatrixInverse(&matView, NULL, &matView);
 
     D3DXMATRIXA16 matProj;
     D3DXMatrixPerspectiveFovLH(&matProj, D3DX_PI / 4, 1.0f, 1.0f, 100.0f);
     g_pd3dDevice->SetTransform(D3DTS_PROJECTION, &matProj);
+
+    WorldViewMat = matView * matProj;
 }
 
 bool Render(float time)
@@ -362,16 +372,22 @@ bool Render(float time)
         if (SUCCEEDED(g_pd3dDevice->BeginScene()))
         {
             SetupMatrices(0);
-            //tiger->Translation(InputManager::instance()->GetVertivalAxis()*DeltaTime * 10.f, 0, 0);
-            //tiger->Translation(0, 0, -InputManager::instance()->GetHorizentalAxis() * DeltaTime*10.f);
 
-            /*tiger->Render();
-            tiger2->Render();
-            plane->Render();
-            camera->Render();*/
-            //dynamic_cast<MeshRenderer*>(sphere->GetComponent(COMPONENT_TYPE::MESH_RENDERER))->Render();
-            //Scene->
+            ////tiger->Translation(InputManager::instance()->GetVertivalAxis()*DeltaTime * 10.f, 0, 0);
+            ////tiger->Translation(0, 0, -InputManager::instance()->GetHorizentalAxis() * DeltaTime*10.f);
+
+            ///*tiger->Render();
+            //tiger2->Render();
+            //plane->Render();
+            //camera->Render();*/
+            ////dynamic_cast<MeshRenderer*>(sphere->GetComponent(COMPONENT_TYPE::MESH_RENDERER))->Render();
+            ////Scene->
+
+
+
+            shader->pTbv->SetMatrix(g_pd3dDevice, shader->g_Val_Handle, &WorldViewMat);
             scenemanager->Render(shader);
+
             // End the scene
             g_pd3dDevice->EndScene();
         }

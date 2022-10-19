@@ -24,6 +24,7 @@ void Mesh::Init(const vector<Vertex>& vertexBuffer, const vector<WORD>& indexBuf
 
 void Mesh::Render(Shader* shader)
 {
+	g_pd3dDevice->SetFVF(D3DFVF_CUSTOMVERTEX);
 	//g_pd3dDevice->SetVertexDeclaration(shader->g_pDecl);
 	if (shader != nullptr)
 	{
@@ -32,10 +33,10 @@ void Mesh::Render(Shader* shader)
 	}
 		
 
-
+	//shader
 	g_pd3dDevice->SetStreamSource(0, _vertexBuffer, 0, sizeof(Vertex));
 	g_pd3dDevice->SetIndices(_indexBuffer);
-	g_pd3dDevice->SetFVF(D3DFVF_CUSTOMVERTEX);
+	
 
 	g_pd3dDevice->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, 0, 0, vertexCount, 0, triCount);
 
